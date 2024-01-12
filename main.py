@@ -72,9 +72,10 @@ def main():
     ]
 
     # call the c function
+    sobel_edge_detection_c(input_ptr, sobel_result_ptr, width, height)
 
     # reshape the 1D result array back to a 2D image array
-    result_image = None
+    result_image = Image.frombytes('L', (width, height), sobel_result_array.tobytes())
 
     # save the image
     save_image(args.output, result_image)
