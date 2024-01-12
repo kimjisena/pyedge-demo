@@ -56,11 +56,28 @@ def main():
     input_array, width, height = load_image(args.input)
 
     # create `ctypes`` pointer to the input image data
+    input_ptr = (ctypes.c_ubyte * len(input_array)).from_buffer(input_array)
 
     # create result array and pointer
+    sobel_result_array = array.array('B', b'\x00' * len(input_array))
+    sobel_result_ptr = (ctypes.c_ubyte * len(sobel_result_array)).from_buffer(sobel_result_array)
 
     # prepare c function signatures
+    sobel_edge_detection_c = sobel_lib.sobel_edge_detection_c
+    sobel_edge_detection_c.argtypes = [
+        ctypes.POINTER(ctypes.c_ubyte),
+        ctypes.POINTER(ctypes.c_ubyte),
+        ctypes.c_int,  # width
+        ctypes.c_int,  # height
+    ]
 
+    # call the c function
+
+    # reshape the 1D result array back to a 2D image array
+    result_image = None
+
+    # save the image
+    save_image(args.output, result_image)
 
     # optionally print verbose information
     if args.verbose:
