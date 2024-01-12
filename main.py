@@ -1,5 +1,8 @@
+import ctypes
 import argparse
-#...(pipenv install Pillow)
+
+# load the c library
+sobel_lib = ctypes.CDLL('./lib.so')
 
 def parse_arguments():
     parser = argparse.ArgumentParser(
@@ -43,6 +46,8 @@ def main():
     # parse command line arguments
     args = parse_arguments();
 
+    # load the input image
+    input_array, width, height = load_image(args.input)
     #...
 
     # optionally print verbose information
